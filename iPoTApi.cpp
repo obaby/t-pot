@@ -858,17 +858,17 @@ bool CiPoTApi::TranslatePLIST(char *originalFile, char *newFile)
 	bool ok = false;
 
 	// Create a URL that specifies the file we will create to hold the XML data.
-	inputFile = CFStringCreateWithCString(kCFAllocatorDefault, originalFile, kStrEncoding);
-	fileURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, inputFile, kPathStyle, false);
+	inputFile = CFStringCreateWithCString(CFAllocatorGetDefault(), originalFile, kStrEncoding);
+	fileURL = CFURLCreateWithFileSystemPath(CFAllocatorGetDefault(), inputFile, kPathStyle, false);
 	if (!fileURL)
 		return false;
 	// Read the XML file.
 	status = CFURLCreateDataAndPropertiesFromResource(
-		kCFAllocatorDefault, fileURL, &resourceData, NULL, NULL, &errorCode);
+		CFAllocatorGetDefault(), fileURL, &resourceData, NULL, NULL, &errorCode);
 	if (resourceData) {
 		// Reconstitute the dictionary using the XML data.
 		propertyList = CFPropertyListCreateFromXMLData(
-			kCFAllocatorDefault, resourceData,kCFPropertyListImmutable, &errorString);
+			CFAllocatorGetDefault(), resourceData,kCFPropertyListImmutable, &errorString);
 		if (propertyList != NULL) {
 			CFStringRef outputFile;
 			CFDataRef xmlData;
@@ -876,10 +876,10 @@ bool CiPoTApi::TranslatePLIST(char *originalFile, char *newFile)
 			SInt32 errorCode;
 			
 			CFRelease(fileURL);
-			outputFile = CFStringCreateWithCString(kCFAllocatorDefault, newFile, kStrEncoding);
-			fileURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, outputFile, kPathStyle, false);
+			outputFile = CFStringCreateWithCString(CFAllocatorGetDefault(), newFile, kStrEncoding);
+			fileURL = CFURLCreateWithFileSystemPath(CFAllocatorGetDefault(), outputFile, kPathStyle, false);
 			// Convert the property list into XML data.
-			xmlData = CFPropertyListCreateXMLData(kCFAllocatorDefault, propertyList);
+			xmlData = CFPropertyListCreateXMLData(CFAllocatorGetDefault(), propertyList);
 			// Write the XML data to the file.
 			status = CFURLWriteDataAndPropertiesToResource(fileURL, xmlData, NULL, &errorCode);
 			ok = status ? true : false;
